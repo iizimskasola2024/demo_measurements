@@ -9,7 +9,6 @@ import jakarta.ws.rs.core.Response;
 import org.jboss.resteasy.reactive.RestPath;
 import si.um.feri.measurements.dao.ProductRepository;
 import si.um.feri.measurements.vao.Product;
-
 import java.util.List;
 
 @Path("/products")

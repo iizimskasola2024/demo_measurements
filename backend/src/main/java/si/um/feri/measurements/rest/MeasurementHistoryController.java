@@ -8,7 +8,6 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import si.um.feri.measurements.dao.MeasurementRepository;
 import si.um.feri.measurements.dto.Measurement;
-
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.List;

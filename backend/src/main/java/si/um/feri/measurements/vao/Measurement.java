@@ -2,7 +2,6 @@ package si.um.feri.measurements.vao;
 
 import jakarta.persistence.*;
 import si.um.feri.measurements.dto.post.PostMeasurement;
-
 import java.time.LocalDateTime;
 
 @Entity

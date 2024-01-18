@@ -21,7 +21,7 @@ A demo on winter school 2024@UM/FERI:
 - build & run *or*
 - docker-compose build & docker-compose up
 
-Then check: http://127.0.0.1:8280/api/v1/swagger-ui.html
+Then check: http://127.0.0.1:8280/api/v1/swagger-ui/
 
 For details check _backend_ folder.
 

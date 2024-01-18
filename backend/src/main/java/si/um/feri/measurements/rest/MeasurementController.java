@@ -11,7 +11,6 @@ import si.um.feri.measurements.dao.ProductRepository;
 import si.um.feri.measurements.dto.post.PostMeasurement;
 import si.um.feri.measurements.dto.post.PostMeasurementResponse;
 import si.um.feri.measurements.vao.Measurement;
-
 import java.util.logging.Logger;
 
 @Path("/product_measurement")
