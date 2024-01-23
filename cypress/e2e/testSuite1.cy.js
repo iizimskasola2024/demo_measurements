@@ -23,7 +23,7 @@ describe('upravljanje izdelka', () => {
       let nameCell = cy.get('tbody tr').children('[id^="productsTableBodyName"]').contains(product)
       nameCell.should('exist')
       nameCell.parent().find('[id^="productsTableBodyEdit"] button').click()
-      cy.get('#editProductMinInput').clear().type(`${minTempN}`)
+      cy.get('#editProductMinInput').type(`{backspace}{backspace}${minTempN}`)
       cy.get('#editProductMaxInput').type(`{backspace}{backspace}${maxTempN}`)
       cy.get('#editProductIdButton').click()
 
