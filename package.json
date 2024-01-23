@@ -3,6 +3,7 @@
     "cypress": "^13.6.3"
   },
   "scripts": {
-    "start": "cypress run"
+    "start": "cypress run",
+    "dev": "vite --host"
   }
 }
