@@ -1,7 +1,7 @@
 describe('template spec', () => {
   
   beforeEach(() => {
-    cy.visit('http://83.212.126.209')
+    cy.visit('http://localhost:3000/')
   })
 
   it('add a measurement', ()=>{
