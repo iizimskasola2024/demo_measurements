@@ -110,7 +110,7 @@ jobs:
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_BE }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=iizimskasola2024_demo_measurements_BE -f backend/pom.xml -DskipTests
         
   cypress:
     runs-on: ubuntu-latest
