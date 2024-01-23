@@ -1,38 +1,41 @@
-describe('template spec', () => {
-  
+describe('upravljanje izdelka', () => {
+  const product = 'Tartufi'
+  const minTemp = 1
+  const maxTemp = 4
+
   beforeEach(() => {
-    cy.visit('http://localhost:3000')
+    cy.visit('http://localhost:3000/products')
   })
 
-  it('add a measurement', ()=>{
-    cy.get('#AddMeasurementButton').click()
-        cy.get('#demo-simple-select').click()
-        cy.get('[role="listbox"]').contains('Milka Classic').then(item => {
-            let id = item.attr('data-value')
-            cy.wrap(item).click()
-            cy.get('#avgTemp').type('19')
-            cy.get('#submitMeasurementButton').click()
-            cy.get('[href="/products"] button').click()
+  it('dodaj-izdelek', () => {
+      cy.get('tbody tr').children('[id^="productsTableBodyName"]').contains(product).should('not.exist') // [] iskanje po atributih značk, ^= delno ujemanje
+      cy.get('#addNewProductButton').click()
+      cy.get('#addProductNameInput').type(product)
+      cy.get('#addProductMaxInput').type(`${minTemp}`) // Za uporabo spremenljivk ${} mora bit string deklariran z ` (AltGr + 7), njihove komande {enter} etc. delajo tudi z navadnim '
+      cy.get('#addProductMinInput').type(`${maxTemp}`)
+      cy.get('#addProductButton').click()
+      cy.get('tbody tr').children('[id^="productsTableBodyName"]').contains(product).should('exist')
+  })
 
-            cy.get('tbody tr th').contains(id).then(th => {
-                const min = th.parent().children('[id^="productsTableBodyMin"]').get(0).textContent
-                const max = th.parent().children('[id^="productsTableBodyMax"]').get(0).textContent
+  it('uredi-izdelek', () => {
+      const minTemp = 0
+      const maxTemp = 5
+      let nameCell = cy.get('tbody tr').children('[id^="productsTableBodyName"]').contains(product)
+      nameCell.should('exist')
+      nameCell.parent().find('[id^="productsTableBodyEdit"] button').click()
+      cy.get('#editProductMinInput').clear().type(`${minTemp}`)
+      cy.get('#editProductMaxInput').type(`{backspace}{backspace}${maxTemp}`)
+      cy.get('#editProductIdButton').click()
 
-                cy.get('[href="/"] button').click()
+      nameCell = cy.get('tbody tr').children('[id^="productsTableBodyName"]').contains(product) 
+      nameCell.parent().children('[id^="productsTableBodyMin"]').should('have.text', `${minTemp}`) 
+      nameCell.parent().children('[id^="productsTableBodyMax"]').should('have.text', `${maxTemp}`) 
+  })
 
-                cy.get('tbody tr').each((tr) => {
-                    const rowId = tr.children('[id^="measurementsTableBodyProductId"]').get(0).textContent
-                    const avgTemp = tr.children('[id^="measurementsTableBodyAverage"]').get(0).textContent
-                    if (rowId === id) {
-                        const temperatureCell = cy.wrap(tr).children('[id^="measurementsTableBodyTempOK"]')
-                        if (avgTemp >= min && avgTemp <= max) {
-                            temperatureCell.find('svg[data-testid="DoneIcon"]').should('exist')
-                        } else {
-                            temperatureCell.find('svg[data-testid="CloseIcon"]').should('exist')
-                        }
-                    }
-                })
-            })
-        })
+  it('brisi-izdelek', () => {
+      const productCell = cy.get('tbody tr').children('[id^="productsTableBodyName"]').contains(product)
+      productCell.should('exist')
+      productCell.parent().find('[id^="productsTableBodyDelete"]').click()
+      productCell.should('not.exist')
   })
 })
