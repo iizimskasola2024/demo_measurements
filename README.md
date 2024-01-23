@@ -29,4 +29,5 @@ For details check _backend_ folder.
 - npm install & npm run *or*
 - `docker run -d -p 3000:80 <image_name>`
 
+
 For details check _frontend_ folder.
