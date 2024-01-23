@@ -134,7 +134,7 @@ jobs:
           record: true
           parallel: true # Runs test in parallel using settings above
         env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          CYPRESS_RECORD_KEY2: ${{ secrets.CYPRESS_RECORD_KEY }}
 
   sonar_frontend:
       name: SonarCloud Frontend
