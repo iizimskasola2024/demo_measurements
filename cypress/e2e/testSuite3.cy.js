@@ -5,7 +5,7 @@ describe('upravljanje meritev', () => {
   })
 
   it('add a measurement', ()=>{
-    cy.get('#AddMeasurementButton'). click() //cy.get('[data-cy="addMeasurementButton"]').click() //best practice
+    cy.get('[data-cy="addMeasurementButton"]').click() //best practice
         cy.get('#demo-simple-select').click()
         cy.get('[role="listbox"]').contains('Milka Classic').then(item => {
             let id = item.attr('data-value')

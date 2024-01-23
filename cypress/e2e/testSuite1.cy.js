@@ -18,18 +18,18 @@ describe('upravljanje izdelka', () => {
   })
 
   it('uredi-izdelek', () => {
-      const minTemp = 0
-      const maxTemp = 5
+      const minTempN = 0
+      const maxTempN = 5
       let nameCell = cy.get('tbody tr').children('[id^="productsTableBodyName"]').contains(product)
       nameCell.should('exist')
       nameCell.parent().find('[id^="productsTableBodyEdit"] button').click()
-      cy.get('#editProductMinInput').clear().type(`${minTemp}`)
-      cy.get('#editProductMaxInput').type(`{backspace}{backspace}${maxTemp}`)
+      cy.get('#editProductMinInput').clear().type(`${minTempN}`)
+      cy.get('#editProductMaxInput').type(`{backspace}{backspace}${maxTempN}`)
       cy.get('#editProductIdButton').click()
 
       nameCell = cy.get('tbody tr').children('[id^="productsTableBodyName"]').contains(product) 
-      nameCell.parent().children('[id^="productsTableBodyMin"]').should('have.text', `${minTemp}`) 
-      nameCell.parent().children('[id^="productsTableBodyMax"]').should('have.text', `${maxTemp}`) 
+      nameCell.parent().children('[id^="productsTableBodyMin"]').should('have.text', `${minTempN}`) 
+      nameCell.parent().children('[id^="productsTableBodyMax"]').should('have.text', `${maxTempN}`) 
   })
 
   it('brisi-izdelek', () => {
