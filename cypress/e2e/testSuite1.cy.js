@@ -3,12 +3,12 @@ describe('upravljanje izdelka', () => {
 
 
   beforeEach(() => {
-    cy.visit('http://localhost:3000')
+    cy.visit('http://localhost:3000/products')
   })
 
   it('dodaj-izdelek', () => {
     
-      cy.get('[href="/products"] button').click()
+     // cy.get('[href="/products"] button').click()
       const minTemp = 1
       const maxTemp = 4
       cy.get('tbody tr').children('[id^="productsTableBodyName"]').contains(product).should('not.exist') // [] iskanje po atributih značk, ^= delno ujemanje
@@ -37,7 +37,7 @@ describe('upravljanje izdelka', () => {
 
   it('brisi-izdelek', () => {
       
-      cy.get('[href="/products"] button').click()
+      //cy.get('[href="/products"] button').click()
       const productCell = cy.get('tbody tr').children('[id^="productsTableBodyName"]').contains(product)
       productCell.should('exist')
       productCell.parent().find('[id^="productsTableBodyDelete"]').click()
