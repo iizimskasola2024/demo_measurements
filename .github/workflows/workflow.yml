@@ -149,7 +149,7 @@ jobs:
             
       - name: Start backend
         run: |
-         ./mvnw quarkus:dev
+         ./mvnw quarkus:dev &
         working-directory: backend
 
       - name: Wait for Quarkus Server to be Ready
