@@ -54,7 +54,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: frontend-build
-          path: frontend/build/
+          path: frontend/
         
   sonar_frontend:
       name: SonarCloud Frontend
@@ -220,7 +220,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: frontend-build
-          path: frontend/build
+          path: frontend/
 
       - name: Install Vercel CLI
         run: npm install -g vercel
@@ -230,4 +230,4 @@ jobs:
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}     
-        working-directory: frontend/build
+        working-directory: frontend/
