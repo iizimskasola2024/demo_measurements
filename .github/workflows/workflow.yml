@@ -195,7 +195,7 @@ jobs:
         with:
           # Starts web server for E2E tests
           # https://docs.cypress.io/guides/continuous-integration/introduction#Boot-your-server
-          start: npm start
+          
           wait-on: 'http://localhost:3000'
           record: true
           parallel: true

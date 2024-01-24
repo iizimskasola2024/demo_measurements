@@ -7,6 +7,8 @@ describe('upravljanje izdelka', () => {
   })
 
   it('dodaj-izdelek', () => {
+    
+     // cy.get('[href="/products"] button').click()
       const minTemp = 1
       const maxTemp = 4
       cy.get('tbody tr').children('[id^="productsTableBodyName"]').contains(product).should('not.exist') // [] iskanje po atributih značk, ^= delno ujemanje
@@ -17,7 +19,7 @@ describe('upravljanje izdelka', () => {
       cy.get('#addProductButton').click()
       cy.get('tbody tr').children('[id^="productsTableBodyName"]').contains(product).should('exist')
   })
-/*
+
   it('uredi-izdelek', () => {
       const minTempN = 0
       const maxTempN = 5
@@ -32,8 +34,10 @@ describe('upravljanje izdelka', () => {
       nameCell.parent().children('[id^="productsTableBodyMin"]').should('have.text', `${minTempN}`) 
       nameCell.parent().children('[id^="productsTableBodyMax"]').should('have.text', `${maxTempN}`) 
   })
-*/
+
   it('brisi-izdelek', () => {
+      
+      //cy.get('[href="/products"] button').click()
       const productCell = cy.get('tbody tr').children('[id^="productsTableBodyName"]').contains(product)
       productCell.should('exist')
       productCell.parent().find('[id^="productsTableBodyDelete"]').click()
