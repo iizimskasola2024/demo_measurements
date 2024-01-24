@@ -64,8 +64,8 @@ jobs:
           name: frontend-build
           path: frontend/build/
         
-  sonar_frontend:
-      name: SonarCloud Frontend
+  static_code_analysis_frontend:
+      name: SonarCloud Frontend Analysis
       runs-on: ubuntu-latest
       needs: [build_frontend]
     
@@ -89,7 +89,7 @@ jobs:
           env:
             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FE }}
           with:
-            args: '-Dsonar.projectKey=iizimskasola2024_demo_measurements_FE'
+            projectBaseDir: frontend/
 
   sonar_backend:
     name: SonarCloud Backend
