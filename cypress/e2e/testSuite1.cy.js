@@ -27,7 +27,7 @@ describe('upravljanje izdelka', () => {
       cy.get('#editProductMinInput').type(`{backspace}{backspace}${minTempN}`)
       cy.get('#editProductMaxInput').type(`{backspace}{backspace}${maxTempN}`)
       cy.get('#editProductIdButton').click()
-
+      cy.wait(2000)
       nameCell = cy.get('tbody tr').children('[id^="productsTableBodyName"]').contains(product) 
       nameCell.parent().children('[id^="productsTableBodyMin"]').should('have.text', `${minTempN}`) 
       nameCell.parent().children('[id^="productsTableBodyMax"]').should('have.text', `${maxTempN}`) 
