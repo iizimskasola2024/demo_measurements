@@ -117,6 +117,8 @@ jobs:
     needs: [build_backend, build_frontend]
     strategy:
       fail-fast: false # https://github.com/cypress-io/github-action/issues/48
+      matrix:
+        containers: [ 1, 2 ] # Uses 2 parallel instances
 
 
     services:
@@ -196,7 +198,7 @@ jobs:
           start: npm start
           wait-on: 'http://localhost:3000'
           record: true
+          parallel: true
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
-          REACT_APP_BACKEND_URL: http://127.0.0.1:8280/api/v1
           # you can also add a GitHub secret
