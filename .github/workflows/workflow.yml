@@ -197,4 +197,5 @@ jobs:
           parallel: true # Runs test in parallel using settings above
         env:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          REACT_APP_BACKEND_URL: http://127.0.0.1:8280/api/v1
           # you can also add a GitHub secret
