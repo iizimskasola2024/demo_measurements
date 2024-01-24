@@ -45,6 +45,14 @@ jobs:
       - name: Install dependencies
         run: npm ci
         working-directory: frontend
+
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: frontend/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
         
       - name: Build frontend
         run: npm run build --no-progress 2>&1 >/dev/null || true # Mutes ESlint warnings
@@ -54,7 +62,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: frontend-build
-          path: frontend/
+          path: frontend/build/
         
   sonar_frontend:
       name: SonarCloud Frontend
@@ -216,11 +224,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Cache node modules
+        uses: actions/cache@v2
+        with:
+          path: frontend/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Download frontend build artifact
         uses: actions/download-artifact@v2
         with:
           name: frontend-build
-          path: frontend/
+          path: frontend/build/
 
       - name: Install Vercel CLI
         run: npm install -g vercel
