@@ -17,6 +17,7 @@
     <surefire-plugin.version>3.1.2</surefire-plugin.version>
     <sonar.organization>iizimskasola2024</sonar.organization>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    <sonar.projectName>iizimskasola2024_demo_measurements_BE<sonar.projectName>
   </properties>
   <dependencyManagement>
     <dependencies>
