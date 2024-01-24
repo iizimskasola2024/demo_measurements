@@ -1,13 +1,14 @@
 describe('upravljanje izdelka', () => {
   const product = 'Tartufi'
-  const minTemp = 1
-  const maxTemp = 4
+
 
   beforeEach(() => {
     cy.visit('http://localhost:3000/products')
   })
 
   it('dodaj-izdelek', () => {
+      const minTemp = 1
+      const maxTemp = 4
       cy.get('tbody tr').children('[id^="productsTableBodyName"]').contains(product).should('not.exist') // [] iskanje po atributih značk, ^= delno ujemanje
       cy.get('#addNewProductButton').click()
       cy.get('#addProductNameInput').type(product)
