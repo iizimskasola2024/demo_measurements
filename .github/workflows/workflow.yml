@@ -234,14 +234,13 @@ jobs:
       matrix:
         containers: [ 1, 2 ] # Uses 2 parallel instances
 
-
     services:
       postgres:
         image: postgres:16
         env:
           POSTGRES_DB: measdb
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -258,7 +257,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
             distribution: 'adopt'
-            java-version: '20'
+            java-version: '21'
             cache: maven
             
       - name: Start backend
