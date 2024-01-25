@@ -191,7 +191,7 @@ jobs:
         
   FE-deploy:
     runs-on: ubuntu-latest
-    needs: FE-static-code-analysis
+    needs: [FE-static-code-analysis, BE-deploy-on-azure]
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
