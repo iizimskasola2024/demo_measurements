@@ -131,7 +131,7 @@ jobs:
         run: echo "Deployed to MS Azure"
 
   FE-build:
-    name: BE Build
+    name: FE Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
