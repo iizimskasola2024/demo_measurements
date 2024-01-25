@@ -9,6 +9,7 @@ on:
 jobs:
   
   BE-build-test-package:
+    name: BE Build & Test & Package
     runs-on: ubuntu-latest
 
     services:
@@ -47,6 +48,7 @@ jobs:
           path: backend/target
   
   BE-docker-image-delivery:
+    name: BE Docker Image Delivery
     runs-on: ubuntu-latest
     needs: BE-build-test-package
 
@@ -84,7 +86,7 @@ jobs:
           TAG_NAME: CD-${{ steps.date.outputs.date }}
 
   BE-static-code-analysis:
-    name: SonarCloud Backend Analysis
+    name: BE SonarCloud Analysis
     runs-on: ubuntu-latest
     needs: [BE-build-test-package]
   
@@ -120,6 +122,7 @@ jobs:
         working-directory: backend/
 
   BE-deploy-on-azure:
+    name: BE Deploy on Azure
     runs-on: ubuntu-latest
     needs: [BE-docker-image-delivery, BE-static-code-analysis]
 
@@ -128,6 +131,7 @@ jobs:
         run: echo "Deployed to MS Azure"
 
   FE-build:
+    name: BE Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -163,7 +167,7 @@ jobs:
           path: frontend/build/
         
   FE-static-code-analysis:
-      name: SonarCloud Frontend Analysis
+      name: FE SonarCloud Analysis
       runs-on: ubuntu-latest
       needs: [FE-build]
     
@@ -190,6 +194,7 @@ jobs:
             projectBaseDir: frontend/
         
   FE-deploy:
+    name: FE Deployment
     runs-on: ubuntu-latest
     needs: [FE-static-code-analysis, BE-deploy-on-azure]
     steps:
@@ -221,6 +226,7 @@ jobs:
         working-directory: frontend/
           
   cypress:
+    name: Functional Tests
     runs-on: ubuntu-latest
     needs: [BE-deploy-on-azure, FE-deploy]
     strategy:
