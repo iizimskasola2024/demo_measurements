@@ -83,20 +83,51 @@ jobs:
         env:
           TAG_NAME: CD-${{ steps.date.outputs.date }}
 
-  deploy-on-azure:
+  BE-static-code-analysis:
+    name: SonarCloud Backend Analysis
     runs-on: ubuntu-latest
-    needs: BE-docker-image-delivery
+    needs: [BE-build-test-package]
+  
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+  
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '21'
+          cache: maven
+  
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Build and analyze
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_BE }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=iizimskasola2024_demo_measurements_BE -DskipTests -Dsonar.qualitygate.wait=true
+        working-directory: backend/
+
+  BE-deploy-on-azure:
+    runs-on: ubuntu-latest
+    needs: [BE-docker-image-delivery, BE-static-code-analysis]
 
     steps:
       - name: Deploy to MS Azure
         run: echo "Deployed to MS Azure"
 
-
-
-
-
-
-  build_frontend:
+  FE-build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -131,10 +162,10 @@ jobs:
           name: frontend-build
           path: frontend/build/
         
-  static_code_analysis_frontend:
+  FE-static-code-analysis:
       name: SonarCloud Frontend Analysis
       runs-on: ubuntu-latest
-      needs: [build_frontend]
+      needs: [FE-build]
     
       steps:
         - name: Checkout repository
@@ -157,46 +188,41 @@ jobs:
             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_FE }}
           with:
             projectBaseDir: frontend/
-
-  static_code_analysis_backend:
-    name: SonarCloud Backend Analysis
+        
+  FE-deploy:
     runs-on: ubuntu-latest
-    needs: [BE-build-test-package]
-  
+    needs: FE-static-code-analysis
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-  
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'adopt'
-          java-version: '20'
-          cache: maven
-  
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
 
-      - name: Cache Maven packages
-        uses: actions/cache@v3
+      - name: Cache node modules
+        uses: actions/cache@v2
         with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
+          path: frontend/node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
 
-      - name: Build and analyze
+      - name: Download frontend build artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: frontend-build
+          path: frontend/build/
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Deploy to Vercel
+        run: vercel --token ${{ secrets.VERCEL_TOKEN }} --prod --build-env REACT_APP_BACKEND_URL=${{ secrets.BACKEND_URL }}   
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN_BE }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=iizimskasola2024_demo_measurements_BE -DskipTests -Dsonar.qualitygate.wait=true
-        working-directory: backend/
-        
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}     
+        working-directory: frontend/
+          
   cypress:
     runs-on: ubuntu-latest
-    needs: [BE-build-test-package, build_frontend]
+    needs: [BE-deploy-on-azure, FE-deploy]
     strategy:
       fail-fast: false # https://github.com/cypress-io/github-action/issues/48
       matrix:
@@ -285,33 +311,4 @@ jobs:
           CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
           # you can also add a GitHub secret
 
-  deploy_frontend:
-    runs-on: ubuntu-latest
-    needs: [build_frontend]
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Cache node modules
-        uses: actions/cache@v2
-        with:
-          path: frontend/node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Download frontend build artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: frontend-build
-          path: frontend/build/
-
-      - name: Install Vercel CLI
-        run: npm install -g vercel
-
-      - name: Deploy to Vercel
-        run: vercel --token ${{ secrets.VERCEL_TOKEN }} --prod --build-env REACT_APP_BACKEND_URL=${{ secrets.BACKEND_URL }}   
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}     
-        working-directory: frontend/
+ 
