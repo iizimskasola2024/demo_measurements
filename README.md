@@ -1,3 +1,4 @@
+[![Delavnica](https://img.shields.io/endpoint?url=https://cloud.cypress.io/badge/detailed/vrsv3n/main&style=flat&logo=cypress)](https://cloud.cypress.io/projects/vrsv3n/runs)
 # Measurements
 
 A demo on winter school 2024@UM/FERI:
