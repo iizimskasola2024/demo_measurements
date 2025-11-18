@@ -2,7 +2,7 @@
 # Measurements
 
 A demo on winter school 2024@UM/FERI:
-- Quarkus backend
+- Quarkus backend 
 - React frontent
 - Complete CI/CD:
   - Build
